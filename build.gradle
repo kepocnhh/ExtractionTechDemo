@@ -1,0 +1,19 @@
+apply from: 'android.gradle'
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:2.3.3'
+    }
+}
+allprojects {
+    repositories {
+        jcenter()
+    }
+    ext {
+        applicationId = 'stan.xtr.ctn'
+        versionCode = 1709191403
+        versionName = "0.00.01"
+    }
+}

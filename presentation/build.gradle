@@ -1,0 +1,28 @@
+apply plugin: 'com.android.application'
+android {
+    def global = rootProject.extensions.getByName("ext")
+    compileSdkVersion global["androidCompileSdkVersion"]
+    buildToolsVersion global["androidBuildToolsVersion"]
+    defaultConfig {
+        minSdkVersion global["androidMinSdkVersion"]
+        targetSdkVersion global["androidTargetSdkVersion"]
+        applicationId global["applicationId"]
+        versionCode global["versionCode"]
+        versionName global["versionName"]
+        archivesBaseName = "$applicationId-$versionCode"
+    }
+    signingConfigs {
+        debug {
+        }
+    }
+    buildTypes {
+        release {
+        }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix '-debug'
+        }
+    }
+}
+dependencies {
+}
