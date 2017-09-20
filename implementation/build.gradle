@@ -1,0 +1,9 @@
+apply plugin: 'com.android.library'
+android {
+    def global = rootProject.extensions.getByName("ext")
+    compileSdkVersion global["androidCompileSdkVersion"]
+    buildToolsVersion global["androidBuildToolsVersion"]
+}
+dependencies {
+    compile project(':business')
+}
