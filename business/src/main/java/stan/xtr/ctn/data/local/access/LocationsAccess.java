@@ -6,4 +6,6 @@ public interface LocationsAccess
 {
     LocationsModels.ExtractionBases extractionBases();
     LocationsModels.Districts districts();
+    LocationsModels.Sources sources();
+    LocationsModels.Colonies colonies();
 }
