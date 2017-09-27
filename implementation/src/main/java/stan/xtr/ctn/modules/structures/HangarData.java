@@ -20,7 +20,7 @@ public class HangarData
         this.parentId = parentId;
         if(capacity < 1)
         {
-            throw new RuntimeException("Property capacity must be positive!");
+            throw new IllegalArgumentException("Property capacity must be positive!");
         }
         this.capacity = capacity;
     }

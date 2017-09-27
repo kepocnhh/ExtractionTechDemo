@@ -18,6 +18,10 @@ public class Positions
     {
         public Pair<Locations.Type, Long> get(Units.Type unitType, long unitId)
         {
+            if(unitType == null)
+            {
+                throw new IllegalArgumentException("Property unitType must be not null!");
+            }
             for(Location location: locationsList)
             {
                 if(location.unit().first() == unitType && location.unit().second() == unitId)
@@ -29,6 +33,10 @@ public class Positions
         }
         public List<Pair<Units.Type, Long>> get(Locations.Type locationType, long locationId)
         {
+            if(locationType == null)
+            {
+                throw new IllegalArgumentException("Property locationType must be not null!");
+            }
             List<Pair<Units.Type, Long>> result = new ArrayList<>();
             for(Location location: locationsList)
             {

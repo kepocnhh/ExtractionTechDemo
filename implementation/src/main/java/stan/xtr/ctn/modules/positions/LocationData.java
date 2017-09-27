@@ -19,6 +19,14 @@ public class LocationData
 
     private LocationData(Units.Type unitType, long unitId, Locations.Type locationType, long locationId)
     {
+        if(unitType == null)
+        {
+            throw new IllegalArgumentException("Property unitType must be not null!");
+        }
+        if(locationType == null)
+        {
+            throw new IllegalArgumentException("Property locationType must be not null!");
+        }
         unit = PairData.create(unitType, unitId);
         location = PairData.create(locationType, locationId);
     }
