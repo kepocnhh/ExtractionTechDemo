@@ -1,5 +1,9 @@
 package stan.xtr.ctn.modules.general;
 
+import android.graphics.Color;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+
 import stan.xtr.ctn.App;
 import stan.xtr.ctn.R;
 import stan.xtr.ctn.core.locations.Colony;
@@ -27,22 +31,38 @@ import stan.xtr.ctn.modules.structures.HutData;
 import stan.xtr.ctn.modules.units.HumanData;
 import stan.xtr.ctn.modules.units.TransportData;
 import stan.xtr.ctn.units.activities.UtilActivity;
+import stan.xtr.ctn.units.views.TownMapView;
 
 public class GeneralActivity
     extends UtilActivity
 {
+    private FrameLayout main_frame;
+    private TownMapView townMap;
+
     protected int getContentView()
     {
         return R.layout.general_screen;
     }
     protected void initViews()
     {
+        main_frame = view(R.id.main_frame);
     }
     protected void init()
     {
         Town town = TownData.create(1, 0, "Chicago", SizeData.create(13, 11));
         test(town);
-        log(town);
+//        log(town);
+        townMap = new TownMapView(this);
+        townMap.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        main_frame.addView(townMap);
+        draw(town);
+    }
+
+    private void draw(Town town)
+    {
+//        townMap.setBackgroundColor(Color.parseColor("#00ff00"));
+        townMap.setTownBackgroundColor(Color.parseColor("#00ff00"));
+        townMap.draw(town);
     }
 
     private void test(Town town)
