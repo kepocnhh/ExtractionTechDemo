@@ -13,7 +13,7 @@ allprojects {
     }
     ext {
         applicationId = 'stan.xtr.ctn'
-        versionCode = 1709292108
-        versionName = "0.00.05dev"
+        versionCode = 1710022004
+        versionName = "0.00.07dev"
     }
 }

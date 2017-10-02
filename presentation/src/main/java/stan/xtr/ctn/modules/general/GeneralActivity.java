@@ -49,10 +49,10 @@ public class GeneralActivity
     }
     protected void init()
     {
-        Town town = TownData.create(1, 0, "Chicago", SizeData.create(13, 11));
+        Town town = TownData.create(1, 0, "Chicago", SizeData.create(6, 4));
         test(town);
 //        log(town);
-        townMap = new TownMapView(this);
+        townMap = new TownMapView(this, town);
         townMap.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         main_frame.addView(townMap);
         draw(town);
@@ -62,7 +62,6 @@ public class GeneralActivity
     {
 //        townMap.setBackgroundColor(Color.parseColor("#00ff00"));
         townMap.setTownBackgroundColor(Color.parseColor("#00ff00"));
-        townMap.draw(town);
     }
 
     private void test(Town town)
