@@ -8,6 +8,10 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.List;
+
+import stan.xtr.ctn.core.locations.District;
+import stan.xtr.ctn.core.locations.ExtractionBase;
 import stan.xtr.ctn.core.map.Town;
 
 public class TownMapView
@@ -15,6 +19,9 @@ public class TownMapView
 {
     private final Paint backgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint townBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint extractionBaseBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint districtBackgroundPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint techLinePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Paint techTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final float density;
 
@@ -28,11 +35,11 @@ public class TownMapView
     private float startedTrackingZoom;
     private float startedTrackingZoomDistance;
     private float zoom = 1;
-    private int backgroundColor = Color.BLACK;
-    private Town town;
-    private int townBackgroundColor = Color.RED;
+    private final Town town;
+    private final ExtractionBase base;
+    private final List<District> districts;
 
-    public TownMapView(Context context, Town t)
+    public TownMapView(Context context, Town t, ExtractionBase b, List<District> ds)
     {
         super(context);
         density = context.getResources().getDisplayMetrics().density;
@@ -44,6 +51,16 @@ public class TownMapView
             throw new IllegalArgumentException("Property town must be exist!");
         }
         town = t;
+        if(b == null)
+        {
+            throw new IllegalArgumentException("Property base must be exist!");
+        }
+        base = b;
+        if(ds == null)
+        {
+            throw new IllegalArgumentException("Property districts must be exist!");
+        }
+        districts = ds;
         lastTouchEvent = TouchEvent.NONE;
         recalculate();
         setOnClickListener(new OnClickListener()
@@ -55,24 +72,33 @@ public class TownMapView
     }
     private void setTechProperties()
     {
+        techLinePaint.setColor(Color.WHITE);
         techTextPaint.setColor(Color.WHITE);
         techTextPaint.setTextSize(px(12));
     }
 
     public void setBackgroundColor(int color)
     {
-        backgroundColor = color;
+        backgroundPaint.setColor(color);
         recalculate();
     }
     public void setTownBackgroundColor(int color)
     {
-        townBackgroundColor = color;
+        townBackgroundPaint.setColor(color);
+        recalculate();
+    }
+    public void setExtractionBaseBackgroundColor(int color)
+    {
+        extractionBaseBackgroundPaint.setColor(color);
+        recalculate();
+    }
+    public void setDistrictBackgroundColor(int color)
+    {
+        districtBackgroundPaint.setColor(color);
         recalculate();
     }
     private void recalculate()
     {
-        backgroundPaint.setColor(backgroundColor);
-        townBackgroundPaint.setColor(townBackgroundColor);
     }
 
     public boolean onTouchEvent(MotionEvent ev)
@@ -242,15 +268,70 @@ public class TownMapView
     protected void onDraw(Canvas canvas)
     {
         canvas.drawRect(0, 0, getWidth(), getHeight(), backgroundPaint);
-        if(town != null)
-        {
-            onDrawTown(canvas, town);
-        }
+        onDrawTown(canvas, town);
+        onDrawExtractionBase(canvas, base);
+        onDrawDistricts(canvas, districts);
         onDrawTech(canvas);
     }
     private void onDrawTown(Canvas canvas, Town town)
     {
         canvas.drawRect(xOffset, yOffset, xOffset + town.size().width()*elementSize, yOffset + town.size().height()*elementSize, townBackgroundPaint);
+        onDrawTownTech(canvas, town);
+    }
+    private void onDrawTownTech(Canvas canvas, Town town)
+    {
+        for(int x=1; x<town.size().width(); x++)
+        {
+            canvas.drawLine(xOffset + elementSize*x, yOffset, xOffset + elementSize*x, yOffset + town.size().height()*elementSize, techLinePaint);
+        }
+        for(int y=1; y<town.size().height(); y++)
+        {
+            canvas.drawLine(xOffset, yOffset + elementSize*y, xOffset + town.size().width()*elementSize, yOffset + elementSize*y, techLinePaint);
+        }
+        for(int x=0; x<town.size().width(); x++)
+        {
+            for(int y=0; y<town.size().height(); y++)
+            {
+                canvas.drawText(x + "," + y, xOffset + elementSize*x + elementSize/3, yOffset + elementSize*y + elementSize/3, techTextPaint);
+            }
+        }
+    }
+    private void onDrawExtractionBase(Canvas canvas, ExtractionBase base)
+    {
+        canvas.drawRect(xOffset + base.coordinates().x()*elementSize,
+                yOffset + base.coordinates().y()*elementSize,
+                xOffset + base.coordinates().x()*elementSize + (base.size().width()/4)*elementSize,
+                yOffset + base.coordinates().y()*elementSize + (base.size().height()/4)*elementSize, extractionBaseBackgroundPaint);
+        onDrawExtractionBaseTech(canvas, base);
+    }
+    private void onDrawExtractionBaseTech(Canvas canvas, ExtractionBase base)
+    {
+        canvas.drawText(base.name(),
+                xOffset + base.coordinates().x()*elementSize + elementSize/3,
+                yOffset + base.coordinates().y()*elementSize + elementSize/2,
+                techTextPaint);
+    }
+    private void onDrawDistricts(Canvas canvas, List<District> districts)
+    {
+        for(District district: districts)
+        {
+            onDrawDistrict(canvas, district);
+        }
+    }
+    private void onDrawDistrict(Canvas canvas, District district)
+    {
+        canvas.drawRect(xOffset + district.coordinates().x()*elementSize,
+                yOffset + district.coordinates().y()*elementSize,
+                xOffset + district.coordinates().x()*elementSize + (district.size().width()/4)*elementSize,
+                yOffset + district.coordinates().y()*elementSize + (district.size().height()/4)*elementSize, districtBackgroundPaint);
+        onDrawDistrictTech(canvas, district);
+    }
+    private void onDrawDistrictTech(Canvas canvas, District district)
+    {
+        canvas.drawText(district.name(),
+                xOffset + district.coordinates().x()*elementSize + elementSize/3,
+                yOffset + district.coordinates().y()*elementSize + elementSize/2,
+                techTextPaint);
     }
     private void onDrawTech(Canvas canvas)
     {

@@ -49,10 +49,12 @@ public class GeneralActivity
     }
     protected void init()
     {
-        Town town = TownData.create(1, 0, "Chicago", SizeData.create(6, 4));
+        Town town = TownData.create(1, 0, "Chicago", SizeData.create(12, 16));
         test(town);
 //        log(town);
-        townMap = new TownMapView(this, town);
+        townMap = new TownMapView(this, town,
+                App.component().data().local().locations().extractionBases().getAllFrom(town).get(0),
+                App.component().data().local().locations().districts().getAllFrom(town));
         townMap.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         main_frame.addView(townMap);
         draw(town);
@@ -61,13 +63,15 @@ public class GeneralActivity
     private void draw(Town town)
     {
 //        townMap.setBackgroundColor(Color.parseColor("#00ff00"));
-        townMap.setTownBackgroundColor(Color.parseColor("#00ff00"));
+        townMap.setTownBackgroundColor(Color.parseColor("#004B8A"));
+        townMap.setExtractionBaseBackgroundColor(Color.parseColor("#E16428"));
+        townMap.setDistrictBackgroundColor(Color.parseColor("#00AF43"));
     }
 
     private void test(Town town)
     {
         App.component().data().local().map().towns().add(town);
-        test(ExtractionBaseData.create(11, town.id(), "Outer Haven"));
+        test(ExtractionBaseData.create(11, town.id(), "Outer Haven", SizeData.create(8, 8), CoordinatesData.create(6, 7)));
         test(DistrictData.create(11, town.id(), "District11", SizeData.create(12, 12), CoordinatesData.create(1, 1)));
     }
     private void test(ExtractionBase base)
