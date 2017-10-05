@@ -49,7 +49,7 @@ public class GeneralActivity
     }
     protected void init()
     {
-        Town town = TownData.create(1, 0, "Chicago", SizeData.create(12, 16));
+        Town town = TownData.create(1, 0, "Chicago", SizeData.create(8, 8));
         test(town);
 //        log(town);
         townMap = new TownMapView(this, town,
@@ -71,7 +71,7 @@ public class GeneralActivity
     private void test(Town town)
     {
         App.component().data().local().map().towns().add(town);
-        test(ExtractionBaseData.create(11, town.id(), "Outer Haven", SizeData.create(8, 8), CoordinatesData.create(6, 7)));
+        test(ExtractionBaseData.create(11, town.id(), "Outer Haven", SizeData.create(8, 8), CoordinatesData.create(5, 5)));
         test(DistrictData.create(11, town.id(), "District11", SizeData.create(12, 12), CoordinatesData.create(1, 1)));
     }
     private void test(ExtractionBase base)
